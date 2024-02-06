@@ -7,11 +7,11 @@ const bcrypt = require('bcrypt');
 const app = express();
 const port = process.env.PORT || 8082;
 
-app.use(bodyParser.json()); // Middleware to parse JSON
+app.use(bodyParser.json());
 
 // Middleware to handle CORS
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');  // use https://jiazhe1221.github.io when website is live on github use http://localhost:1111 for local host
+  res.setHeader('Access-Control-Allow-Origin', 'https://nimbus-wealth.com/');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   next();
