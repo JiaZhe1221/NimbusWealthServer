@@ -1,13 +1,15 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000; // Use the dynamic port assigned by Heroku or default to 3000
 
 // Define a route for the root path
 app.get('/', (req, res) => {
-  res.send('Hello, world!');
+    res.send('Hello, this is your root route!');
 });
 
+// Other routes can be defined here...
+
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
