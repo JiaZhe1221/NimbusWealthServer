@@ -1,15 +1,15 @@
 const express = require('express');
 const app = express();
 
-
-app.get("", (req, res) => {
-    res.send('Hello, this is your root route!');
+// Define a route for the root path
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
 });
 
-// Other routes can be defined here...
+// Other routes and server setup...
 
-const PORT = process.env.PORT || 3001;
-
+// Start the server
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
