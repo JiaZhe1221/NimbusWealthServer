@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const { ObjectId } = require('mongodb');
 const bcrypt = require('bcrypt');
+console.log(bcrypt)
 
 const app = express();
 const port = process.env.PORT || 8082;
