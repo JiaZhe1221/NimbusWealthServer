@@ -5,7 +5,7 @@ const { ObjectId } = require('mongodb');
 const bcrypt = require('bcrypt');
 
 const app = express();
-const port = 8082;
+const port = process.env.PORT || 8082;
 
 app.use(bodyParser.json()); // Middleware to parse JSON
 
@@ -478,6 +478,7 @@ MongoClient.connect(uri, (err, client) => {
                     }
                 );
             }
+
             // Check if the user has enough funds in yourCurrency wallet
             if (!stockCurrency || stockCurrency < totalCost) {
                 return res.status(400).json({ error: 'Insufficient funds.' });
@@ -610,7 +611,6 @@ MongoClient.connect(uri, (err, client) => {
             return res.status(200).json({ success: 'Stocks bought successfully.' });
         } catch (error) {
             // Send an error response with details
-            console.log(error)
             res.status(500).json({ error: 'Internal server error.', details: error.message });
         }
     });
@@ -690,7 +690,12 @@ MongoClient.connect(uri, (err, client) => {
     
             const currentUser = userData.username;
             const allUsersData = await usersCollection.find().toArray();
-            const sortedUsers = allUsersData.sort((a, b) => b.return - a.return);
+    
+            // Filter out users without return data
+            const usersWithReturnData = allUsersData.filter(user => user.return !== undefined);
+    
+            // Sort users with return data
+            const sortedUsers = usersWithReturnData.sort((a, b) => b.return - a.return);
     
             // Assign ranks to users based on their position in the sorted array
             const leaderboardData = sortedUsers.map((user, index) => ({
@@ -700,7 +705,7 @@ MongoClient.connect(uri, (err, client) => {
             }));
     
             // Find the rank of the current user
-            const currentUserRank = leaderboardData.findIndex(user => user.username === currentUser) + 1;
+            const currentUserRank = leaderboardData.find(user => user.username === currentUser)?.rank || null;
     
             // Send the ranked leaderboard data along with the current user's rank
             res.json({ leaderboard: leaderboardData, currentUserRank });
@@ -709,8 +714,9 @@ MongoClient.connect(uri, (err, client) => {
             res.status(500).json({ error: 'Internal server error.' });
         }
     });
+    
 
-    app.get('/getLeaderboard', async (req, res) => {
+    app.get('/getFIPAmount', async (req, res) => {
         const { userId } = req.query; // Use query parameters for GET requests
         try {
             // Fetch user data from the database based on the user ID
